@@ -5,6 +5,7 @@
 package MODEL;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,29 +15,26 @@ import java.util.Queue;
  */
 
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 public class Snake {
-    private Queue<Point> cuerpo; 
-    private Direccion direccion; 
-   
+   private List<Point> cuerpo;
+    private Direccion direccion;
 
     public Snake() {
-        cuerpo = new LinkedList<>();
-        direccion = Direccion.RIGHT; 
-        
+        cuerpo = new ArrayList<>();
+        direccion = Direccion.RIGHT;
+
         for (int i = 0; i < 3; i++) {
-            cuerpo.add(new Point(3 - i - 1, 0)); 
+            cuerpo.add(new Point(3 - i - 1, 0));
         }
     }
 
     public void move() {
-       
-        Point head = cuerpo.peek(); 
+        Point head = cuerpo.get(0); 
         Point newHead = new Point(head);
 
-       
+        
         switch (direccion) {
             case UP: newHead.translate(0, -1); break;
             case DOWN: newHead.translate(0, 1); break;
@@ -44,24 +42,23 @@ public class Snake {
             case RIGHT: newHead.translate(1, 0); break;
         }
 
-      
-        cuerpo.add(newHead);
+        cuerpo.add(0, newHead);
+
+        moverCuerpoRecursivamente(cuerpo.size() - 1);
+    }
+
+    private void moverCuerpoRecursivamente(int index) {
+        if (index <= 1) return;
+        cuerpo.get(index).setLocation(cuerpo.get(index - 1));
+        moverCuerpoRecursivamente(index - 1); 
     }
 
     public void grow() {
-       
-       
-        cuerpo.add(cuerpo.peek()); 
-    }
-
-    public void update() {
-      
-     
-        cuerpo.poll(); 
+        Point tail = cuerpo.get(cuerpo.size() - 1);
+        cuerpo.add(new Point(tail));
     }
 
     public void setDireccion(Direccion newDireccion) {
-      
         if (newDireccion == Direccion.UP && direccion != Direccion.DOWN) {
             direccion = newDireccion;
         } else if (newDireccion == Direccion.DOWN && direccion != Direccion.UP) {
@@ -73,14 +70,11 @@ public class Snake {
         }
     }
 
-    public Queue<Point> getCuerpo() {
+    public List<Point> getCuerpo() {
         return cuerpo;
     }
 }
 
-
 enum Direccion {
     UP, DOWN, LEFT, RIGHT
 }
-
-
