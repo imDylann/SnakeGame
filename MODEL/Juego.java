@@ -44,12 +44,10 @@ import java.awt.Point;
         snake.move(); 
 
        
-        if (snake.getCuerpo().peek().equals(comida.getPosition())) {
+        if (snake.getCuerpo().get(0).equals(comida.getPosition())) {
             snake.grow(); 
             puntuacion.increase(); 
             comida.spawn(); 
-        } else {
-            snake.update(); 
         }
 
        
@@ -57,7 +55,7 @@ import java.awt.Point;
     }
 
     private void checkCollisions() {
-        Point head = snake.getCuerpo().peek();
+        Point head = snake.getCuerpo().get(0);
 
       
         if (head.x < 0 || head.x >= guijuego.getWidth() / guijuego.CELL_SIZE ||
