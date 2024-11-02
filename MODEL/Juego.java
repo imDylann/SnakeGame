@@ -40,7 +40,7 @@ import java.awt.Point;
         }
     }
 
-    private void updateGame() {
+    public void updateGame() {
         snake.move(); 
 
        
@@ -54,7 +54,7 @@ import java.awt.Point;
         checkCollisions();
     }
 
-    private void checkCollisions() {
+    public void checkCollisions() {
         Point head = snake.getCuerpo().get(0);
 
       
@@ -82,6 +82,11 @@ import java.awt.Point;
     public Comida getComida() {
         return comida;
     }
+    
+    public boolean isRunning() {
+    return running;
+}
+
 
     public Puntuacion getPuntuacion() {
         return puntuacion;
