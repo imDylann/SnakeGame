@@ -6,20 +6,12 @@ package MODEL;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
-
-/**
- *
- * @author Saliim
- */
-
-
 import java.util.List;
 
 public class Snake {
-   private List<Point> cuerpo;
+    private List<Point> cuerpo;
     private Direccion direccion;
+    private boolean hasEaten; 
 
     public Snake() {
         cuerpo = new ArrayList<>();
@@ -28,13 +20,13 @@ public class Snake {
         for (int i = 0; i < 3; i++) {
             cuerpo.add(new Point(3 - i - 1, 0));
         }
+        hasEaten = false; 
     }
 
     public void move() {
         Point head = cuerpo.get(0); 
         Point newHead = new Point(head);
 
-        
         switch (direccion) {
             case UP: newHead.translate(0, -1); break;
             case DOWN: newHead.translate(0, 1); break;
@@ -42,7 +34,13 @@ public class Snake {
             case RIGHT: newHead.translate(1, 0); break;
         }
 
-        cuerpo.add(0, newHead);
+        if (hasEaten) {
+            cuerpo.add(0, newHead); 
+            hasEaten = false; 
+        } else {
+            cuerpo.add(0, newHead); 
+            cuerpo.remove(cuerpo.size() - 1);
+        }
 
         moverCuerpoRecursivamente(cuerpo.size() - 1);
     }
@@ -54,8 +52,7 @@ public class Snake {
     }
 
     public void grow() {
-        Point tail = cuerpo.get(cuerpo.size() - 1);
-        cuerpo.add(new Point(tail));
+        hasEaten = true; 
     }
 
     public void setDireccion(Direccion newDireccion) {
@@ -75,6 +72,4 @@ public class Snake {
     }
 }
 
-enum Direccion {
-    UP, DOWN, LEFT, RIGHT
-}
+

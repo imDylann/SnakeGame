@@ -54,7 +54,7 @@ public class FrmHome extends javax.swing.JFrame {
 
     private void btnJugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJugarActionPerformed
         this.setVisible(false);
-        GuiJuego g = new GuiJuego();
+        GuiJuego1 g = new GuiJuego1();
         g.setVisible(true);
     }//GEN-LAST:event_btnJugarActionPerformed
 

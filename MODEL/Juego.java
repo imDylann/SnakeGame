@@ -4,6 +4,8 @@
  */
 package MODEL;
 
+
+import GUIS.GuiJuego1;
 import java.awt.Point;
 
 /**
@@ -15,13 +17,13 @@ import java.awt.Point;
     private Snake snake;         
     private Comida comida;       
     private Puntuacion puntuacion; 
-    private GuiJuego guijuego;  // Frame del juego, hay que crearla y configurar sus metodos,observar los que se usan en esta clase para                             
+    private GuiJuego1 guijuego;  // Frame del juego, hay que crearla y configurar sus metodos,observar los que se usan en esta clase para                             
     private boolean running;    //crearlos logicamente y que funcione esta clase
 
-    public Juego(GuiJuego guijuego) {
+    public Juego(GuiJuego1 guijuego) {
         this.guijuego = guijuego;
         this.snake = new Snake();
-        this.comida = new Comida(guijuego.getWidth() / guijuego.Panel.CELL_SIZE, guijuego.getHeight() / guijuego.CELL_SIZE);
+        this.comida = new Comida(guijuego.getWidth() / GuiJuego1.CELL_SIZE, guijuego.getHeight() / GuiJuego1.CELL_SIZE);
         this.puntuacion = new Puntuacion();
         this.running = true; 
     }
@@ -36,7 +38,7 @@ import java.awt.Point;
                 Thread.currentThread().interrupt();
             }
 
-            guijuego.repaint(); // Actualizar el panel del juego
+            guijuego.repaint(); 
         }
     }
 

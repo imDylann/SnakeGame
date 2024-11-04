@@ -4,13 +4,14 @@
  */
 package CONTROLLER;
 
+import GUIS.GuiJuego;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.Timer;
 import MODEL.Juego;
-import GUI.GuiJuego;
+
 
 public class Controller {
     private GuiJuego guiJuego;
