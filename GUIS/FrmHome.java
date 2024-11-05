@@ -39,12 +39,20 @@ public class FrmHome extends javax.swing.JFrame {
         btnJugar.setBackground(new java.awt.Color(153, 204, 0));
         btnJugar.setForeground(new java.awt.Color(153, 204, 0));
         btnJugar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/BotonPlay (4).png"))); // NOI18N
+        btnJugar.setContentAreaFilled(false);
+        btnJugar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/BotonPlay (5).png"))); // NOI18N
+        btnJugar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/BotonPlay (5).png"))); // NOI18N
+        btnJugar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnJugarMouseExited(evt);
+            }
+        });
         btnJugar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnJugarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnJugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 430, 180, 50));
+        getContentPane().add(btnJugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, 280, 90));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/snakeLogo.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -57,6 +65,10 @@ public class FrmHome extends javax.swing.JFrame {
         GuiJuego1 g = new GuiJuego1();
         g.setVisible(true);
     }//GEN-LAST:event_btnJugarActionPerformed
+
+    private void btnJugarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnJugarMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnJugarMouseExited
 
     /**
      * @param args the command line arguments

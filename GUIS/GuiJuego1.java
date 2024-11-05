@@ -7,6 +7,7 @@ package GUIS;
 import MODEL.Direccion;
 import MODEL.Juego;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -23,11 +24,13 @@ public class GuiJuego1 extends javax.swing.JFrame {
 
     public static final int CELL_SIZE = 20;
     private Juego juego;
+    private JPanel jPanel1;  
 
     public GuiJuego1() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        
         this.setSize(600, 600);
+        this.setLocationRelativeTo(null);
         juego = new Juego(this);
         new Thread(juego).start();
         jPanel1.setFocusable(true);
@@ -46,7 +49,7 @@ public class GuiJuego1 extends javax.swing.JFrame {
         };
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Game");
+        setTitle("Snake Game");
         setSize(new java.awt.Dimension(400, 400));
 
         jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -97,8 +100,15 @@ public class GuiJuego1 extends javax.swing.JFrame {
         Point comidaPos = juego.getComida().getPosition();
         g.setColor(Color.RED);
         g.fillRect(comidaPos.x * CELL_SIZE, comidaPos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        drawScore(g);
     }
 
+    private void drawScore(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 15));
+        g.drawString("Score: " + juego.getPuntuacion().getScore(), 10, 20);
+    }
+    
     public void updateGame() {
         jPanel1.repaint();
     }
@@ -106,10 +116,8 @@ public class GuiJuego1 extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new GuiJuego1().setVisible(true));
     }
-
-    // Variables declaration - do not modify                     
-    private JPanel jPanel1;
-    // End of variables declaration                   
+                    
+         
 }
- 
 
+ 

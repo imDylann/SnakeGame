@@ -4,28 +4,32 @@
  */
 package MODEL;
 
-
+import GUIS.FrmHome;
 import GUIS.GuiJuego1;
 import java.awt.Point;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Saliim
  */
 
-   public class Juego implements Runnable {
-    private Snake snake;         
-    private Comida comida;       
-    private Puntuacion puntuacion; 
-    private GuiJuego1 guijuego;  // Frame del juego, hay que crearla y configurar sus metodos,observar los que se usan en esta clase para                             
-    private boolean running;    //crearlos logicamente y que funcione esta clase
+public class Juego implements Runnable {
+    private Snake snake;
+    private Comida comida;
+    private Puntuacion puntuacion;
+    private GuiJuego1 guijuego;
+    private boolean running;
+    FrmHome g = new FrmHome();
+    private int velocidad; //Variable para controlar la velocidad
 
     public Juego(GuiJuego1 guijuego) {
         this.guijuego = guijuego;
         this.snake = new Snake();
         this.comida = new Comida(guijuego.getWidth() / GuiJuego1.CELL_SIZE, guijuego.getHeight() / GuiJuego1.CELL_SIZE);
         this.puntuacion = new Puntuacion();
-        this.running = true; 
+        this.running = true;
+        this.velocidad = 125; // Velocidad inicial 
     }
 
     public void run() {
@@ -33,27 +37,34 @@ import java.awt.Point;
             updateGame();
 
             try {
-                Thread.sleep(100); 
+                Thread.sleep(velocidad);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
 
-            guijuego.repaint(); 
+            guijuego.repaint();
         }
     }
 
     public void updateGame() {
-        snake.move(); 
+        snake.move();
 
        
         if (snake.getCuerpo().get(0).equals(comida.getPosition())) {
-            snake.grow(); 
-            puntuacion.increase(); 
-            comida.spawn(); 
+            snake.grow();
+            puntuacion.increase();
+            comida.spawn();
+            aumentarVelocidad(); 
         }
 
        
         checkCollisions();
+    }
+
+    private void aumentarVelocidad() {
+        if (velocidad > 50) { // Asegúrate de que la velocidad no sea demasiado baja
+            velocidad -= 10; // Reduce el tiempo de espera para aumentar la velocidad
+        }
     }
 
     public void checkCollisions() {
@@ -63,18 +74,25 @@ import java.awt.Point;
         if (head.x < 0 || head.x >= guijuego.getWidth() / guijuego.CELL_SIZE ||
             head.y < 0 || head.y >= guijuego.getHeight() / guijuego.CELL_SIZE) {
             running = false; 
+            JOptionPane.showMessageDialog(guijuego, "HAS CHOCADO!");
+            guijuego.setVisible(false);
+            g.setVisible(true);
         }
 
       
         for (Point segment : snake.getCuerpo()) {
             if (segment != head && segment.equals(head)) {
                 running = false; 
+                JOptionPane.showMessageDialog(guijuego, "TE HAS MORDIDO!");
+                guijuego.setVisible(false);    
+                g.setVisible(true);
+                
             }
         }
     }
 
     public void stop() {
-        running = false; 
+        running = false;
     }
 
     public Snake getSnake() {
@@ -84,13 +102,13 @@ import java.awt.Point;
     public Comida getComida() {
         return comida;
     }
-    
+
     public boolean isRunning() {
-    return running;
-}
+        return running;
+    }
 
 
     public Puntuacion getPuntuacion() {
         return puntuacion;
     }
-   }
+}
