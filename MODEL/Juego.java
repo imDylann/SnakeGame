@@ -6,8 +6,10 @@ package MODEL;
 
 import GUIS.FrmHome;
 import GUIS.GuiJuego1;
+import static GUIS.GuiJuego1.CELL_SIZE;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JOptionPane;
 
 /**
@@ -70,48 +72,56 @@ public class Juego implements Runnable {
             velocidad -= 10; 
         }
     }
-     private void generarObstaculos(int cantidad) {
-        int maxFilas = guijuego.getWidth() / GuiJuego1.CELL_SIZE;
-        int maxColumnas = guijuego.getHeight() / GuiJuego1.CELL_SIZE;
+        public ArrayList <Obstaculos> generarObstaculos(int cantidad) {
+         Random rand = new Random();
+    for (int i = 0; i < cantidad; i++) {
+        int x = rand.nextInt(guijuego.getWidth() / CELL_SIZE) * CELL_SIZE;
+        int y = rand.nextInt(guijuego.getHeight() / CELL_SIZE) * CELL_SIZE;
+        Point posicion = new Point(x, y);
+        
+        // Adjust to match available constructor
+        obstaculos.add(new Obstaculos(30,30,posicion));
+  }
+    return obstaculos;
+    }
 
-        for (int i = 0; i < cantidad; i++) {
-            int x = (int) (Math.random() * maxFilas) * GuiJuego1.CELL_SIZE;
-            int y = (int) (Math.random() * maxColumnas) * GuiJuego1.CELL_SIZE;
-            obstaculos.add(new Obstaculos(x, y));
+   public void checkCollisions() {
+    Point head = snake.getCuerpo().get(0);
+
+    // Check wall collisions
+    if (head.x < 0 || head.x >= guijuego.getWidth() / GuiJuego1.CELL_SIZE ||
+        head.y < 0 || head.y >= guijuego.getHeight() / GuiJuego1.CELL_SIZE) {
+        running = false;
+        JOptionPane.showMessageDialog(guijuego, "HAS CHOCADO CON LA PARED!");
+        endGame();
+        return;
+    }
+
+    // Check self-collision
+    for (int i = 1; i < snake.getCuerpo().size(); i++) {
+        if (snake.getCuerpo().get(i).equals(head)) {
+            running = false;
+            JOptionPane.showMessageDialog(guijuego, "TE HAS MORDIDO!");
+            endGame();
+            return;
         }
     }
 
-    public void checkCollisions() {
-        Point head = snake.getCuerpo().get(0);
-
-      
-        if (head.x < 0 || head.x >= guijuego.getWidth() / guijuego.CELL_SIZE ||
-            head.y < 0 || head.y >= guijuego.getHeight() / guijuego.CELL_SIZE) {
-            running = false; 
-            JOptionPane.showMessageDialog(guijuego, "HAS CHOCADO!");
-            guijuego.setVisible(false);
-            g.setVisible(true);
-        }
-
-      
-        for (Point segment : snake.getCuerpo()) {
-            if (segment != head && segment.equals(head)) {
-                running = false; 
-                JOptionPane.showMessageDialog(guijuego, "TE HAS MORDIDO!");
-                guijuego.setVisible(false);    
-                g.setVisible(true);
-                
-            }
-        }
-          for (Obstaculos obstaculo : obstaculos) {
-            if (head.equals(obstaculo.getPosition())) {
-                running = false;
-                JOptionPane.showMessageDialog(guijuego, "¡CHOCASTE CON UN OBSTÁCULO!");
-                guijuego.setVisible(false);
-                g.setVisible(true);
-            }
+    // Check collision with obstacles
+    for (Obstaculos obstaculo : obstaculos) {
+        if (head.equals(obstaculo.getPosition())) {
+            running = false;
+            JOptionPane.showMessageDialog(guijuego, "¡CHOCASTE CON UN OBSTÁCULO!");
+            endGame();
+            return;
         }
     }
+}
+
+private void endGame() {
+    guijuego.setVisible(false);
+    g.setVisible(true); // Shows the main menu or home screen
+}
 
     public void stop() {
         running = false;

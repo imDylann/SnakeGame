@@ -41,7 +41,7 @@ public static final int CELL_SIZE = 20;
         juego = new Juego(this);
         obstaculos = new ArrayList<>();
         
-        generarObstaculos(20);
+       obstaculos = juego.generarObstaculos(20);
         new Thread(juego).start();
         jPanel1.setFocusable(true);
         jPanel1.requestFocusInWindow();
