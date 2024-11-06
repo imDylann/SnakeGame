@@ -68,8 +68,8 @@ public class Juego implements Runnable {
     }
 
     private void aumentarVelocidad() {
-        if (velocidad > 50) { 
-            velocidad -= 10; 
+        if (velocidad > 80) { 
+            velocidad -= 4; 
         }
     }
         public ArrayList <Obstaculos> generarObstaculos(int cantidad) {
