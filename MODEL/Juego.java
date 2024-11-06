@@ -7,6 +7,7 @@ package MODEL;
 import GUIS.FrmHome;
 import GUIS.GuiJuego1;
 import java.awt.Point;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,6 +21,7 @@ public class Juego implements Runnable {
     private Puntuacion puntuacion;
     private GuiJuego1 guijuego;
     private boolean running;
+    private ArrayList<Obstaculos> obstaculos;
     FrmHome g = new FrmHome();
     private int velocidad; //Variable para controlar la velocidad
 
@@ -30,6 +32,8 @@ public class Juego implements Runnable {
         this.puntuacion = new Puntuacion();
         this.running = true;
         this.velocidad = 125; // Velocidad inicial 
+        this.obstaculos = new ArrayList<>();
+        generarObstaculos(10);  // Generar obstáculos
     }
 
     public void run() {
@@ -62,8 +66,18 @@ public class Juego implements Runnable {
     }
 
     private void aumentarVelocidad() {
-        if (velocidad > 50) { // Asegúrate de que la velocidad no sea demasiado baja
-            velocidad -= 10; // Reduce el tiempo de espera para aumentar la velocidad
+        if (velocidad > 50) { 
+            velocidad -= 10; 
+        }
+    }
+     private void generarObstaculos(int cantidad) {
+        int maxFilas = guijuego.getWidth() / GuiJuego1.CELL_SIZE;
+        int maxColumnas = guijuego.getHeight() / GuiJuego1.CELL_SIZE;
+
+        for (int i = 0; i < cantidad; i++) {
+            int x = (int) (Math.random() * maxFilas) * GuiJuego1.CELL_SIZE;
+            int y = (int) (Math.random() * maxColumnas) * GuiJuego1.CELL_SIZE;
+            obstaculos.add(new Obstaculos(x, y));
         }
     }
 
@@ -89,6 +103,14 @@ public class Juego implements Runnable {
                 
             }
         }
+          for (Obstaculos obstaculo : obstaculos) {
+            if (head.equals(obstaculo.getPosition())) {
+                running = false;
+                JOptionPane.showMessageDialog(guijuego, "¡CHOCASTE CON UN OBSTÁCULO!");
+                guijuego.setVisible(false);
+                g.setVisible(true);
+            }
+        }
     }
 
     public void stop() {
@@ -110,5 +132,8 @@ public class Juego implements Runnable {
 
     public Puntuacion getPuntuacion() {
         return puntuacion;
+    }
+      public ArrayList<Obstaculos> getObstaculos() {
+        return obstaculos;
     }
 }

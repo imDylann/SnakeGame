@@ -6,11 +6,14 @@ package GUIS;
 
 import MODEL.Direccion;
 import MODEL.Juego;
+import MODEL.Obstaculos;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JPanel;
 
 /**
@@ -21,17 +24,24 @@ import javax.swing.JPanel;
 
 
 public class GuiJuego1 extends javax.swing.JFrame {
-
-    public static final int CELL_SIZE = 20;
+public static final int CELL_SIZE = 20;
     private Juego juego;
-    private JPanel jPanel1;  
+    private JPanel jPanel1;
+    private ArrayList<Obstaculos> obstaculos; // List to store obstacles
+   // private BackgroundFrame backgroundframe;
 
     public GuiJuego1() {
         initComponents();
+      //   backgroundframe = new BackgroundFrame(); // Crear el fondo
+       // backgroundframe.setVisible(true); // Mostrar el fondo
+       // setContentPane(backgroundframe.getContentPane()); 
         
         this.setSize(600, 600);
         this.setLocationRelativeTo(null);
         juego = new Juego(this);
+        obstaculos = new ArrayList<>();
+        
+        generarObstaculos(20);
         new Thread(juego).start();
         jPanel1.setFocusable(true);
         jPanel1.requestFocusInWindow();
@@ -39,7 +49,6 @@ public class GuiJuego1 extends javax.swing.JFrame {
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
-
         jPanel1 = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -89,17 +98,40 @@ public class GuiJuego1 extends javax.swing.JFrame {
         }
     }
 
+    // Method to generate random obstacles
+    private void generarObstaculos(int cantidad) {
+         Random rand = new Random();
+    for (int i = 0; i < cantidad; i++) {
+        int x = rand.nextInt(getWidth() / CELL_SIZE) * CELL_SIZE;
+        int y = rand.nextInt(getHeight() / CELL_SIZE) * CELL_SIZE;
+        Point posicion = new Point(x, y);
+        
+        // Adjust to match available constructor
+        obstaculos.add(new Obstaculos(30,30,posicion));
+  }
+    }
+
     private void drawGame(Graphics g) {
         g.clearRect(0, 0, jPanel1.getWidth(), jPanel1.getHeight());
 
+        // Draw the snake
         g.setColor(Color.GREEN);
         for (Point segment : juego.getSnake().getCuerpo()) {
             g.fillRect(segment.x * CELL_SIZE, segment.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         }
 
+        // Draw the food
         Point comidaPos = juego.getComida().getPosition();
         g.setColor(Color.RED);
         g.fillRect(comidaPos.x * CELL_SIZE, comidaPos.y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+        // Draw the obstacles
+        g.setColor(Color.BLUE);
+        for (Obstaculos obstaculo : obstaculos) {
+            obstaculo.drawObstacle(g);
+        }
+
+        // Draw the score
         drawScore(g);
     }
 
@@ -113,11 +145,12 @@ public class GuiJuego1 extends javax.swing.JFrame {
         jPanel1.repaint();
     }
 
+    public ArrayList<Obstaculos> getObstaculos() {
+        return obstaculos;
+    }
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> new GuiJuego1().setVisible(true));
     }
-                    
-         
-}
-
+    }
  
